@@ -1,6 +1,9 @@
 ## Local development
 1. `sudo service docker start`
 2. `docker-compose up -d`
+3. `docker cp ./sql/000-pg-setup.sql pgdb:0.sql && docker exec pgdb psql dpl_db dpl_user -f 0.sql`
+3. `docker cp ./sql/001-create-real_property_residential.sql pgdb:1.sql && docker exec pgdb psql dpl_db dpl_user -f 1.sql`
+3. `docker cp ./sql/002-populate-real_property_residential.sql pgdb:0.sql && docker exec pgdb psql dpl_db dpl_user -f 0.sql`
 
 
 ## Data population
@@ -10,6 +13,7 @@ might need sudo for some of these
 ```
 docker cp ./data/2023-02-21/real_property_residential_characteristics.csv pgdb:input.csv
 
+docker cp ./sql/000-pg-setup.sql pgdb:0.sql
 docker cp ./sql/000-create-real_property_residential.sql pgdb:1.sql
 docker cp ./sql/001-populate-real_property_residential.sql pgdb:2.sql
 ```

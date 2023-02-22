@@ -8,6 +8,8 @@ services:
     environment:
       PGRST_DB_URI: postgres://dpl_user:password@db:5432/dpl_db
       PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
+      PGRST_DB_SCHEMAS: api
+      PGRST_DB_ANON_ROLE: web_anon
     depends_on:
       - db
   db:
@@ -19,6 +21,14 @@ services:
       POSTGRES_DB: dpl_db
       POSTGRES_USER: dpl_user
       POSTGRES_PASSWORD: password
-  # Uncomment this if you want to persist the data.
-  # volumes:
-  #   - "./pgdata:/var/lib/postgresql/data"
+    volumes:
+      - ./init:/opt/init
+  swagger:
+    image: swaggerapi/swagger-ui
+    container_name: swagger
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      API_URL: http://localhost:3000/

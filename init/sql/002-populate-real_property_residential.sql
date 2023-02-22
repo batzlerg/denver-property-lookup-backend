@@ -1,0 +1,1 @@
+\COPY api.real_property_residential FROM './data/real_property_residential_characteristics.csv' WITH (FORMAT CSV, DELIMITER ',', HEADER TRUE, NULL '', FORCE_NULL (CO_OWNER, OWNER_DIR, OWNER_APT, SITE_MORE, PROP_CLASS_IMPS, STORY, STYLE_CN, BED_RMS, FULL_B, HLF_B, CCYRBLT, CCAGE_RM, UNITS));

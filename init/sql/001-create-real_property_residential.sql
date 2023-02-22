@@ -1,5 +1,3 @@
-CREATE SCHEMA api
-
 CREATE TABLE api.real_property_residential (
   PARID TEXT primary key,
   CD TEXT,
@@ -52,3 +50,5 @@ CREATE TABLE api.real_property_residential (
   NBHD_1_CN TEXT,
   LEGL_DESCRIPTION TEXT
 );
+
+GRANT SELECT ON api.real_property_residential TO web_anon;
