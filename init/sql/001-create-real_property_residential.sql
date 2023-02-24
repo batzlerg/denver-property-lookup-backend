@@ -39,7 +39,7 @@ CREATE TABLE api.real_property_residential (
   hlf_b SMALLINT null,
   ccyrblt BIGINT null,
   ccage_rm BIGINT null, -- 0=null
-  units TEXT null,
+  units SMALLINT null,
   asmt_appr_land BIGINT,
   total_value BIGINT,
   asdland BIGINT,
@@ -49,8 +49,9 @@ CREATE TABLE api.real_property_residential (
   nbhd_1 DOUBLE PRECISION,
   nbhd_1_cn TEXT,
   legl_description TEXT,
-  property_address GENERATED ALWAYS AS
-  CONCAT(site_nbr, CASE WHEN site_dir <> '' THEN ' ' ELSE '' END, site_dir, ' ', site_name, ' ', site_mode) STORED;
+  property_address TEXT GENERATED ALWAYS AS (
+    site_nbr || case when site_dir <> '' then ' ' else '' end || site_dir || ' ' || site_name || ' ' || site_mode || case when site_more <> '' then ' ' else '' end || site_mode
+  ) STORED;
 );
 
 -- index computed full address string for user input typeahead matching, e.g.

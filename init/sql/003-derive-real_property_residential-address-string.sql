@@ -1,2 +1,2 @@
-ALTER TABLE api.real_property_residential
-ADD COLUMN property_address TEXT GENERATED ALWAYS AS (site_nbr || case when site_dir <> '' then ' ' else '' end || site_dir || ' ' || site_name || ' ' || site_mode) STORED;
+ALTER TABLE api.real_property_residential DROP COLUMN property_address;
+ALTER TABLE api.real_property_residential ADD COLUMN property_address TEXT GENERATED ALWAYS AS (site_nbr || case when site_dir <> '' then ' ' else '' end || site_dir || ' ' || site_name || ' ' || site_mode || case when site_more <> '' then ' ' || site_more else '' end) STORED;
