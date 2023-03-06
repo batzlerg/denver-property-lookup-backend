@@ -1,3 +1,5 @@
+- [ ] build image and deploy to cloud
+- [ ] refactor index.ts into modules, maybe use a (real framework)[https://github.com/honojs/hono]
 - [ ] audit pg user + role for web-facing API
 - [ ] index on api.property_residential.property_address (and perhaps name change)
 - [ ] evaulate address fuzzy matching https://www.freecodecamp.org/news/fuzzy-string-matching-with-postgresql/
