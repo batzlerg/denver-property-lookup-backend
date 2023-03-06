@@ -9,7 +9,7 @@
   "description": "Backend for Denver Property Lookup",
   "license": "ISC",
   "scripts": {
-    "start": "bun run index.ts",
+    "start": "docker-compose up -d --build web",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
