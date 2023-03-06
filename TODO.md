@@ -1,3 +1,3 @@
 - [ ] audit pg user + role for web-facing API
-- [ ] index on api.real_property_residential.property_address (and perhaps name change)
+- [ ] index on api.property_residential.property_address (and perhaps name change)
 - [ ] evaulate address fuzzy matching https://www.freecodecamp.org/news/fuzzy-string-matching-with-postgresql/

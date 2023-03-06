@@ -30,11 +30,11 @@ export default {
     switch (url.pathname) {
       case "/propertyMatch":
         try {
-          const address = url.searchParams.get('property_address');
+          const address = url.searchParams.get('q');
           const matches = await sql`
             select
               property_address
-            from api.real_property_residential
+            from api.property_residential
             where property_address like ${address} || '%'
             limit 5;
           `;
@@ -57,7 +57,21 @@ export default {
           );
         }
       case "/rpc/fuzzy_search":
-      // url.searchParams.append('term', `${input}`);
+        const term = url.searchParams.get('q');
+        const matches = await sql`
+          select api.fuzzy_search(${term});
+        `;
+        if (matches?.length) {
+          return new Response(
+            JSON.stringify(matches),
+            { status: 500 }
+          );
+        } else {
+          return new Response(
+            "No matching properties",
+            { status: 404 }
+          );
+        }
       default:
         return new Response(
           null,

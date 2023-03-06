@@ -10,6 +10,10 @@
 1. `sudo service docker start`
 2. `docker-compose up -d`
 
+### full recreation
+1. `docker rm -f $(docker ps -a -q) && docker volume rm $(docker volume ls -q)`
+2. `docker exec --workdir /opt/init pgdb sh init.sh`
+
 `localhost:8080` is SwaggerUI
 `localhost:3000` is Bun backend
 
