@@ -11,7 +11,7 @@
 2. `docker-compose up -d`
 
 `localhost:8080` is SwaggerUI
-`localhost:3000` is PostgREST backend
+`localhost:3000` is Bun backend
 
 ## Docker learnings
 

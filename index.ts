@@ -2,18 +2,22 @@ import postgres from 'postgres'
 
 let sql: postgres.Sql<{}>;
 try {
-  console.table({
+  console.log({
+    host: process.env.DB_HOST,
     database: process.env.DB_DB,
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
   })
   sql = postgres({
+    host: process.env.DB_HOST,
     database: process.env.DB_DB,
     username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    port: process.env.PORT ? parseInt(process.env.PORT, 10) : 3000,
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
   });
-  console.log('asdf')
+  const [{ version }] = await sql`SELECT version()`;
+  console.log(version);
 } catch (err) {
   console.error(err);
 }
@@ -21,6 +25,7 @@ try {
 export default {
   port: 3000,
   async fetch(request: Request) {
+    console.log('request received');
     const url = new URL(request.url);
     switch (url.pathname) {
       case "/propertyMatch":
@@ -30,8 +35,8 @@ export default {
             select
               property_address
             from api.real_property_residential
-            where property_address like '${address}%'
-            limit 5
+            where property_address like ${address} || '%'
+            limit 5;
           `;
           if (matches?.length) {
             return new Response(

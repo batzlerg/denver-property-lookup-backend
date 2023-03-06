@@ -2,19 +2,17 @@ version: '3'
 services:
   web:
     build: .
-    command: npm run start
-    volumes:
-      - .:/usr/app/
-      - /usr/app/node_modules
+    container_name: web
     ports:
       - "3000:3000"
     depends_on:
-      - postgres
+      - db
     environment:
       DB_USER: dpl_user
       DB_PASSWORD: password
       DB_DB: dpl_db
-      PORT: 5432
+      DB_PORT: 5432
+      DB_HOST: db
   db:
     image: postgres
     container_name: pgdb

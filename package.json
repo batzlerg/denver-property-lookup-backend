@@ -1,18 +1,18 @@
 {
   "name": "denver-property-lookup-backend",
   "version": "1.0.0",
-  "description": "Backend for Denver Property Lookup",
+  "author": "",
   "main": "index.ts",
+  "devDependencies": {
+    "@types/node": "^18.14.6"
+  },
+  "description": "Backend for Denver Property Lookup",
+  "license": "ISC",
   "scripts": {
     "start": "bun run index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "postgres": "^3.3.3"
-  },
-  "devDependencies": {
-    "@types/node": "^18.14.6"
   }
 }
