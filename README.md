@@ -10,8 +10,16 @@
 1. `sudo service docker start`
 2. `docker-compose up -d`
 
-### full recreation
+### full recreation one-liner (beware)
+```
+docker-compose down && \
+docker rm -f $(docker ps -a -q) && \
+docker volume rm $(docker volume ls -q) && \
+docker-compose up -d &&
+docker exec --workdir /opt/init pgdb sh init.sh
+```
 1. `docker rm -f $(docker ps -a -q) && docker volume rm $(docker volume ls -q)`
+2. `docker-compose up -d`
 2. `docker exec --workdir /opt/init pgdb sh init.sh`
 
 `localhost:8080` is SwaggerUI
