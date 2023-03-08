@@ -6,3 +6,12 @@ export function respond(body: BodyInit | null, init: ResponseInit): Response {
   response.headers.set('Access-Control-Allow-Headers', '*');
   return response;
 }
+
+export function getOptionsResponse(req: Request) {
+  if (req.method === 'OPTIONS') {
+    return respond(
+      null,
+      { status: 200 }
+    )
+  }
+}

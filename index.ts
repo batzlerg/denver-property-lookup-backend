@@ -1,5 +1,5 @@
 
-import { respond } from './utils/respond'
+import { respond, getOptionsResponse } from './utils/respond'
 import { LocationService } from './services/locationService';
 import { PropertyService } from './services/propertyService';
 import { initDbConnection } from './utils/database';
@@ -15,8 +15,10 @@ export default {
     try {
       console.log('request received:', request.url);
       const url = new URL(request.url);
+      const optionsResponse = getOptionsResponse(request);
       switch (url.pathname) {
         case "/property": {
+          if (optionsResponse) return optionsResponse;
           const address = url.searchParams.get('q');
           const properties = await propertyService.getPropertyByAddress(address || '');
           if (properties?.length) {
@@ -32,6 +34,7 @@ export default {
           }
         }
         case "/propertyMatch": {
+          if (optionsResponse) return optionsResponse;
           const address = url.searchParams.get('q');
           const properties = await propertyService.suggestCompleteAddress(address || '');
 
@@ -48,8 +51,15 @@ export default {
           }
         }
         case "/location": {
-          const [lat, long] = [url.searchParams.get('lat'), url.searchParams.get('lng')];
-          const addresses = await locationService.getAddressesMatchingLocation(lat, long);
+          if (optionsResponse) return optionsResponse;
+          const [lat, lng] = [url.searchParams.get('lat'), url.searchParams.get('lng')];
+          if (!lat || !lng) {
+            return respond(
+              `Bad parameters - received ${JSON.stringify({ lat, lng })}`,
+              { status: 400 }
+            );
+          }
+          const addresses = await locationService.getAddressesMatchingLocation(lat, lng);
           const matchingAddresses = await propertyService.filterByDbInclusion(addresses);
           if (matchingAddresses?.length) {
             return respond(
@@ -64,6 +74,7 @@ export default {
           }
         }
         case "/search": {
+          if (optionsResponse) return optionsResponse;
           const term = url.searchParams.get('q');
           const matches: Array<{ property_address: string }> = await sql`
           select fuzzy_search as property_address from api.fuzzy_search(${term});
