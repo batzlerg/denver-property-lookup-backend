@@ -16,7 +16,7 @@ export class LocationService {
     url.searchParams.append('result_type', 'premise');
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(url);
       if (response.ok) {
         const parsed = await response.json();
         const candidateAddresses = buildAddressStrings(parsed.results)?.flat();
