@@ -29,19 +29,17 @@ export class PropertyService {
       `;
     return matches.map(address => address.property_address);
   }
-  //todo: verify postgres adapter syntax here
-  async filterByDbInclusion(addresses: string[]) {
-    console.log(addresses);
-    try {
 
-      const result = this.sql`    
+  async filterByDbInclusion(addresses: string[]) {
+    try {
+      const result = await this.sql`
         select
           property_address
         from api.property_residential
-        where property_address in values ${this.sql(addresses.map(x => [x]))} || '%'
+        where property_address in ${this.sql(addresses)}
         limit 5;
-        `.describe().then(console.log);
-      return [];
+      `;
+      return result.map(address => address.property_address);
     }
     catch (err) {
       console.log('jones')
