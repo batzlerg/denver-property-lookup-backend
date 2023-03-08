@@ -1,20 +1,13 @@
-import postgres from 'postgres'
-import { respond } from './utils/respond'
 
-let sql: postgres.Sql<{}>;
-try {
-  sql = postgres({
-    host: process.env.DB_HOST,
-    database: process.env.DB_DB,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432,
-  });
-  const [{ version }] = await sql`SELECT version()`;
-  console.log(version);
-} catch (err) {
-  console.error(err);
-}
+import { respond } from './utils/respond'
+import { LocationService } from './services/locationService';
+import { PropertyService } from './services/propertyService';
+import { initDbConnection } from './utils/database';
+
+const sql = await initDbConnection();
+
+const propertyService = new PropertyService({ sql });
+const locationService = new LocationService({ sql });
 
 export default {
   port: 3000,
@@ -25,15 +18,10 @@ export default {
       case "/property":
         try {
           const address = url.searchParams.get('q');
-          const matches = await sql`
-            select *
-            from api.property_residential
-            where property_address like ${address} || '%'
-            limit 5;
-          `;
-          if (matches?.length) {
+          const properties = await propertyService.getPropertyByAddress(address || '');
+          if (properties?.length) {
             return respond(
-              JSON.stringify(matches),
+              JSON.stringify(properties),
               { status: 200 }
             );
           } else {
@@ -52,16 +40,11 @@ export default {
       case "/propertyMatch":
         try {
           const address = url.searchParams.get('q');
-          const matches: Array<{ property_address: string }> = await sql`
-            select
-              property_address
-            from api.property_residential
-            where property_address like ${address} || '%'
-            limit 5;
-          `;
-          if (matches?.length) {
+          const properties = await propertyService.suggestCompleteAddress(address || '');
+
+          if (properties?.length) {
             return respond(
-              JSON.stringify(matches.map(address => address.property_address)),
+              JSON.stringify(properties),
               { status: 200 }
             );
           } else {
@@ -75,6 +58,21 @@ export default {
           return respond(
             null,
             { status: 500 }
+          );
+        }
+      case "/location":
+        const [lat, long] = [url.searchParams.get('lat'), url.searchParams.get('long')];
+        const addresses = await locationService.getAddressesMatchingLocation(lat, long);
+        const matchingAddresses = await propertyService.filterByDbInclusion(addresses);
+        if (matchingAddresses?.length) {
+          return respond(
+            JSON.stringify(matchingAddresses),
+            { status: 200 }
+          );
+        } else {
+          return respond(
+            "No matching properties",
+            { status: 404 }
           );
         }
       case "/search":
