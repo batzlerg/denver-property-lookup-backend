@@ -1,20 +1,9 @@
 version: '3'
 services:
-  web:
-    build: .
-    container_name: web
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
-    environment:
-      DB_USER: dpl_user
-      DB_PASSWORD: password
-      DB_DB: dpl_db
-      DB_PORT: 5432
-      DB_HOST: db
   db:
-    image: postgres
+    build:
+      context: ./db
+      dockerfile: Dockerfile
     container_name: pgdb
     ports:
       - "5432:5432"
@@ -23,13 +12,26 @@ services:
       POSTGRES_USER: dpl_user
       POSTGRES_PASSWORD: password
     volumes:
-      - ./init:/opt/init
-  swagger:
-    image: swaggerapi/swagger-ui
-    container_name: swagger
+      - ./db/init:/opt/init
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U POSTGRES_USER" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: web
     ports:
-      - "8080:8080"
-    expose:
-      - "8080"
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
     environment:
-      API_URL: http://localhost:3000/
+      DB_USER: dpl_user
+      DB_PASSWORD: password
+      DB_DB: dpl_db
+      DB_PORT: 5432
+      DB_HOST: db

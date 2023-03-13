@@ -4,4 +4,3 @@
 - [ ] index on api.property_residential.property_address (and perhaps name change)
 - [ ] evaulate address fuzzy matching https://www.freecodecamp.org/news/fuzzy-string-matching-with-postgresql/
 - [ ] rename init -> db-init and filter from bun copy
-- [ ] separate into two apps - 1. wrapper db + docker app 2. bun app
