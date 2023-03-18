@@ -3,4 +3,4 @@
 - [ ] audit pg user + role for web-facing API
 - [ ] index on api.property_residential.property_address (and perhaps name change)
 - [ ] evaulate address fuzzy matching https://www.freecodecamp.org/news/fuzzy-string-matching-with-postgresql/
-- [ ] rename init -> db-init and filter from bun copy
+- [ ] clean up env variables and make sure Dockerfiles can work for deploy and local use
