@@ -12,17 +12,14 @@
 
 ### full recreation one-liner (beware)
 ```
-docker compose down && \
-docker rm -f $(docker ps -a -q) && \
-docker volume rm $(docker volume ls -q)
+docker compose down && docker system prune -a
 ```
-```
-docker compose up -d &&
-docker exec --workdir /opt/init pgdb sh init.sh
-```
-1. `docker rm -f $(docker ps -a -q) && docker volume rm $(docker volume ls -q)`
+
+### generating dumpfile
+1. uncomment opt/init bind mount lines in docker-compose
 2. `docker compose up -d`
-2. `docker exec --workdir /opt/init pgdb sh init.sh`
+3. `docker exec --workdir /opt/init pgdb sh init.sh`
+4. `docker exec -t pgdb pg_dumpall -U dpl_user > ./db/dump.sql`
 
 `localhost:3000` is Bun backend
 
@@ -30,6 +27,7 @@ docker exec --workdir /opt/init pgdb sh init.sh
 
 - `docker compose up -d` to run in the background (detached mode)
 - [full recreate of all containers](https://docs.tibco.com/pub/mash-local/4.3.0/doc/html/docker/GUID-BD850566-5B79-4915-987E-430FC38DAAE4.html)
+- ARG is used only during build, ENV is persisted in the container
 
 ## Helpful commands
 
