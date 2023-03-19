@@ -10,7 +10,7 @@ const propertyService = new PropertyService({ sql });
 const locationService = new LocationService({ sql });
 
 export default {
-  port: 3000,
+  port: process.env.PORT ?? 3000,
   async fetch(request: Request) {
     try {
       console.log('request received:', request.url);
