@@ -1,25 +1,8 @@
 ## Local development
 
-### first time bootstrap
+### Running things locally
 1. `sudo service docker start`
 2. `docker compose up -d`
-3. `docker exec --workdir /opt/init pgdb sh init.sh`
-4. `docker restart pgdb` (picks up schema changes)
-
-### subsequent runs
-1. `sudo service docker start`
-2. `docker compose up -d`
-
-### full recreation one-liner (beware)
-```
-docker compose down && docker system prune -a
-```
-
-### generating dumpfile
-1. uncomment opt/init bind mount lines in docker-compose
-2. `docker compose up -d`
-3. `docker exec --workdir /opt/init pgdb sh init.sh`
-4. `docker exec -t pgdb pg_dumpall -U dpl_user > ./db/dump.sql`
 
 `localhost:3000` is Bun backend
 
@@ -32,3 +15,4 @@ docker compose down && docker system prune -a
 ## Helpful commands
 
 - `docker exec -it pgdb psql dpl_db -U dpl_user` to get psql REPL, `\q` to quit
+- full recreation one-liner: `docker compose down && docker system prune -a`
