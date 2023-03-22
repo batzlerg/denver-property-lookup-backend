@@ -42,7 +42,6 @@ export class PropertyService {
       return result.map(address => address.property_address);
     }
     catch (err) {
-      console.log('jones')
       console.error(err);
     }
   }

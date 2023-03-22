@@ -59,11 +59,19 @@ export default {
               { status: 400 }
             );
           }
+          // If we have an exact match, filter down to that. Google doesn't always
+          // include directional params (e.g. 123 *N* Main St), so if there's no
+          // direct match, return exact options so the FE can handle fuzzy search
           const addresses = await locationService.getAddressesMatchingLocation(lat, lng);
           const matchingAddresses = await propertyService.filterByDbInclusion(addresses);
           if (matchingAddresses?.length) {
             return respond(
               JSON.stringify(matchingAddresses),
+              { status: 200 }
+            );
+          } else if (addresses) {
+            return respond(
+              JSON.stringify(addresses),
               { status: 200 }
             );
           } else {
